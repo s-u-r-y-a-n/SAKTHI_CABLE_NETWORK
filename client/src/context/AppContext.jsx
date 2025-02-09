@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import {toast} from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AppContext = createContext();
 
@@ -12,6 +12,9 @@ export const AppContextProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const [inputValues, setInputValues] = useState({});
+    const [toggle, setToggle] = useState(true);
+    const [openSubmenu, setOpenSubmenu] = useState(null);
+    const location = useLocation();
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -29,7 +32,7 @@ export const AppContextProvider = ({ children }) => {
             axios.defaults.withCredentials = true;
             const { data } = await axios.post(`${backendUrl}/api/auth/login`, inputValues)
             if (data.success) {
-                localStorage.setItem("authToken", data.token); 
+                localStorage.setItem("authToken", data.token);
                 navigate("/home");
                 setInputValues({ email: "", password: "" });
             } else {
@@ -46,10 +49,20 @@ export const AppContextProvider = ({ children }) => {
 
     }
 
+    function toggleSidebar() {
+        setToggle(!toggle);
+    }
+
+    const handleSubmenuToggle = (menuName) => {
+        setOpenSubmenu(openSubmenu === menuName ? null : menuName);
+    };
 
     const value = {
         inputValues, setInputValues,
-        handleChange, handleSubmit
+        handleChange, handleSubmit,
+        toggleSidebar, toggle,
+        handleSubmenuToggle, openSubmenu,
+        location
     };
 
     return (

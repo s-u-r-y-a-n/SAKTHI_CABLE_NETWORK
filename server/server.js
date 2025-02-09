@@ -5,13 +5,13 @@ import connectDb from "./config/mongodb.js";
 import authRouter from "./routes/authRoutes.js";
 import cookieParser from "cookie-parser";
 
-dotenv.config({ path: './.env' });  
+dotenv.config({ path: './.env' });
 connectDb();
-const app = express();  
+const app = express();
 app.use(cookieParser());
 const port = process.env.PORT || 6000;
-const allowedOrigins = ["http://localhost:5173", "https://suryamernstack.netlify.app"];
-   
+const allowedOrigins = ["http://localhost:5174", "http://localhost:5173", "https://suryamernstack.netlify.app"];
+
 //Middlewares
 app.use(express.json());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
@@ -26,7 +26,7 @@ app.use("/api/auth", authRouter);
 
 //Server running port
 const server = app.listen(port, () => {
-    console.log(`Surya, Your server is running on PORT: ${port}`);      
+    console.log(`Surya, Your server is running on PORT: ${port}`);
 });
 
 server.on('error', (err) => {
